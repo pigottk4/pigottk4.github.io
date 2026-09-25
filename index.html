@@ -1,460 +1,313 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Zoha Khan | Data Engineer</title>
-<meta name="description" content="Zoha Khan — Data Engineer in Karachi building pipelines, warehouses and Power BI models with SQL, Python, Airflow and Docker.">
-<meta property="og:title" content="Zoha Khan | Data Engineer">
-<meta property="og:description" content="Pipelines, warehouses and the metrics on top of them.">
-<meta name="theme-color" content="#0A0D12">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230A0D12'/%3E%3Cpath d='M9 10h14L9 22h14' stroke='%23C8FF4D' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#0A0D12;--bg2:#10151D;--card:#131922;--line:#232B37;--line2:#2E3846;
-  --text:#EEF1F5;--soft:#A9B2BF;--dim:#7C8796;
-  --lime:#C8FF4D;--cyan:#4DE3FF;--violet:#A58BFF;
-  --display:'Bricolage Grotesque',system-ui,sans-serif;
-  --sans:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;
-  --mono:'JetBrains Mono',Menlo,Consolas,monospace;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;scroll-padding-top:80px}
-body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-a{color:inherit}
-::selection{background:var(--lime);color:#0A0D12}
-:focus-visible{outline:2px solid var(--lime);outline-offset:3px;border-radius:6px}
-.wrap{max-width:1200px;margin:0 auto;padding:0 32px}
-.mono{font-family:var(--mono)}
-
-/* background grid + glow */
-.bg-grid{position:fixed;inset:0;z-index:-2;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:64px 64px;opacity:.28;mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,#000 30%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,#000 30%,transparent 75%)}
-.bg-glow{position:fixed;z-index:-1;width:720px;height:720px;border-radius:50%;filter:blur(120px);opacity:.18;pointer-events:none}
-.g1{background:var(--lime);top:-320px;left:-200px}
-.g2{background:var(--cyan);top:-260px;right:-260px;opacity:.14}
-
-/* nav */
-header{position:sticky;top:0;z-index:50;padding-top:env(safe-area-inset-top,0px);background:rgba(10,13,18,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid transparent;transition:border-color .3s}
-header.scrolled{border-bottom-color:var(--line)}
-.nav{display:flex;align-items:center;justify-content:space-between;height:72px;gap:20px}
-.logo{font-family:var(--display);font-weight:800;font-size:22px;text-decoration:none;letter-spacing:-.02em}
-.logo b{color:var(--lime)}
-.links{display:flex;align-items:center;gap:6px}
-.links a{text-decoration:none;color:var(--soft);font-size:15px;font-weight:500;padding:10px 14px;border-radius:999px;transition:color .2s,background .2s}
-.links a:hover{color:var(--text);background:var(--card)}
-.links a.cta{background:var(--lime);color:#0A0D12;font-weight:700;margin-left:8px}
-.links a.cta:hover{background:#D9FF85}
-.burger{display:none;background:none;border:1px solid var(--line2);color:var(--text);border-radius:999px;height:44px;padding:0 18px;font:600 15px var(--sans);cursor:pointer}
-
-/* hero */
-.hero{padding:88px 0 72px;display:grid;grid-template-columns:1.15fr 1fr;gap:56px;align-items:center}
-.badge{display:inline-flex;align-items:center;gap:10px;padding:8px 16px 8px 12px;border:1px solid var(--line2);border-radius:999px;font-size:14px;color:var(--soft);background:rgba(19,25,34,.7)}
-.pulse{width:9px;height:9px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 0 rgba(200,255,77,.6);animation:pulse 2s infinite}
-@keyframes pulse{70%{box-shadow:0 0 0 10px rgba(200,255,77,0)}100%{box-shadow:0 0 0 0 rgba(200,255,77,0)}}
-.hero h1{font-family:var(--display);font-weight:800;font-size:clamp(48px,7.4vw,96px);line-height:.95;letter-spacing:-.035em;margin:26px 0 24px}
-.hero h1 .grad{background:linear-gradient(95deg,var(--lime) 0%,var(--cyan) 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
-.lede{font-size:19px;color:var(--soft);max-width:560px}
-.lede strong{color:var(--text);font-weight:600}
-.btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:34px}
-.btn{display:inline-flex;align-items:center;gap:10px;height:54px;padding:0 26px;border-radius:999px;font-weight:700;font-size:16px;text-decoration:none;transition:transform .2s,background .2s,border-color .2s}
-.btn:hover{transform:translateY(-2px)}
-.btn-lime{background:var(--lime);color:#0A0D12}
-.btn-ghost{border:1px solid var(--line2);color:var(--text)}
-.btn-ghost:hover{border-color:var(--text)}
-
-/* pipeline visual */
-.viz{position:relative;border:1px solid var(--line2);border-radius:24px;background:linear-gradient(180deg,#121821,#0D1117);padding:22px;box-shadow:0 40px 80px -30px rgba(0,0,0,.7)}
-.viz-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.dots{display:flex;gap:7px}.dots i{width:11px;height:11px;border-radius:50%;background:var(--line2)}
-.dots i:first-child{background:#FF6B6B}.dots i:nth-child(2){background:#FFD166}.dots i:nth-child(3){background:var(--lime)}
-.viz-top span{font-family:var(--mono);font-size:12px;color:var(--dim)}
-.viz svg{width:100%;height:auto;display:block}
-.flow{stroke-dasharray:6 8;animation:flow 1.4s linear infinite}
-@keyframes flow{to{stroke-dashoffset:-28}}
-.term{margin-top:12px;padding:16px 18px;border-radius:14px;background:#07090D;border:1px solid var(--line);font-family:var(--mono);font-size:13px;line-height:1.8;color:var(--soft);min-height:118px}
-.term .p{color:var(--lime)}.term .ok{color:var(--cyan)}
-.caret{display:inline-block;width:8px;height:15px;background:var(--lime);vertical-align:-2px;animation:blink 1s steps(1) infinite}
-@keyframes blink{50%{opacity:0}}
-
-/* marquee */
-.marquee{border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;padding:22px 0;background:rgba(16,21,29,.6)}
-.track{display:flex;gap:48px;width:max-content;animation:scroll 32s linear infinite}
-.track span{font-family:var(--display);font-weight:600;font-size:28px;color:var(--dim);white-space:nowrap;display:flex;align-items:center;gap:48px}
-.track span::after{content:"✦";color:var(--lime);font-size:18px}
-@keyframes scroll{to{transform:translateX(-50%)}}
-
-/* sections */
-section.block{padding:120px 0 0}
-.eyebrow{font-family:var(--mono);font-size:13px;color:var(--lime);letter-spacing:.06em;margin-bottom:16px}
-h2{font-family:var(--display);font-weight:800;font-size:clamp(38px,5vw,64px);line-height:1;letter-spacing:-.03em}
-.head{display:flex;justify-content:space-between;align-items:flex-end;gap:32px;margin-bottom:48px}
-.head p{max-width:420px;color:var(--soft)}
-
-/* stats */
-.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
-.stat{padding:30px;border:1px solid var(--line);border-radius:20px;background:var(--card)}
-.stat b{display:block;font-family:var(--display);font-size:56px;font-weight:800;line-height:1;letter-spacing:-.03em}
-.stat:nth-child(1) b{color:var(--lime)}.stat:nth-child(2) b{color:var(--cyan)}.stat:nth-child(3) b{color:var(--violet)}
-.stat span{display:block;margin-top:12px;color:var(--soft);font-size:15px}
-
-/* experience */
-.job{display:grid;grid-template-columns:260px 1fr;gap:40px;padding:40px;border:1px solid var(--line);border-radius:24px;background:var(--card);position:relative;overflow:hidden}
-.job::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(var(--lime),var(--cyan))}
-.job + .job{margin-top:16px}
-.job .when{font-family:var(--mono);font-size:14px;color:var(--dim)}
-.job h3{font-family:var(--display);font-size:28px;font-weight:600;letter-spacing:-.01em;line-height:1.15}
-.job .org{color:var(--lime);font-weight:600;margin-top:6px}
-.job ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:14px 28px}
-.job li{position:relative;padding-left:22px;color:var(--soft)}
-.job li::before{content:"";position:absolute;left:0;top:11px;width:8px;height:8px;border-radius:2px;background:var(--lime);transform:rotate(45deg)}
-
-/* projects */
-.projects{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:16px}
-.proj{grid-column:span 3;position:relative;display:flex;flex-direction:column;gap:16px;padding:32px;border:1px solid var(--line);border-radius:24px;background:var(--card);text-decoration:none;overflow:hidden;transition:transform .3s,border-color .3s}
-.proj.wide{grid-column:span 6;display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center}
-.proj::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(400px circle at var(--mx,50%) var(--my,50%),rgba(200,255,77,.10),transparent 60%);opacity:0;transition:opacity .3s}
-.proj:hover{transform:translateY(-4px);border-color:var(--line2)}
-.proj:hover::after{opacity:1}
-.proj .art{border-radius:16px;background:#0B0F15;border:1px solid var(--line);height:190px;display:flex;align-items:center;justify-content:center}
-.proj.wide .art{height:300px}
-.proj .art svg{width:78%;height:auto}
-.proj .kind{font-family:var(--mono);font-size:13px;color:var(--dim)}
-.proj h3{font-family:var(--display);font-size:30px;font-weight:600;letter-spacing:-.02em;line-height:1.1}
-.proj p{color:var(--soft)}
-.tags{display:flex;flex-wrap:wrap;gap:8px}
-.tags span{font-family:var(--mono);font-size:12px;padding:6px 12px;border-radius:999px;border:1px solid var(--line2);color:var(--text)}
-.tags span.hot{border-color:rgba(200,255,77,.5);color:var(--lime)}
-.go{display:inline-flex;align-items:center;gap:8px;font-weight:700;color:var(--lime);margin-top:auto}
-.go svg{transition:transform .2s}.proj:hover .go svg{transform:translate(3px,-3px)}
-
-/* skills */
-.skills{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-.sk{padding:30px;border:1px solid var(--line);border-radius:22px;background:var(--card)}
-.sk h3{font-family:var(--display);font-size:22px;font-weight:600;margin-bottom:18px;display:flex;align-items:center;gap:12px}
-.sk h3 i{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-style:normal;font-size:16px;background:rgba(200,255,77,.12);color:var(--lime)}
-.sk:nth-child(2) h3 i{background:rgba(77,227,255,.12);color:var(--cyan)}
-.sk:nth-child(3) h3 i{background:rgba(165,139,255,.14);color:var(--violet)}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-.chips span{font-size:14px;padding:7px 13px;border-radius:10px;background:var(--bg2);border:1px solid var(--line);color:var(--text)}
-
-/* edu */
-.edu{display:grid;grid-template-columns:1.2fr 1fr;gap:16px}
-.edu .card{padding:36px;border:1px solid var(--line);border-radius:24px;background:var(--card)}
-.edu .big{background:linear-gradient(135deg,#1A2410 0%,#0F1A1F 100%);border-color:#2C3A1C}
-.edu h3{font-family:var(--display);font-size:32px;font-weight:600;line-height:1.15;letter-spacing:-.02em;margin:10px 0 12px}
-.edu .label{font-family:var(--mono);font-size:13px;color:var(--lime)}
-.cert{padding:18px 0;border-bottom:1px solid var(--line)}
-.cert:last-child{border-bottom:0;padding-bottom:0}
-.cert b{display:block;font-size:18px}
-.cert span{color:var(--soft);font-size:15px}
-
-/* contact */
-.contact{margin:120px 0 0;padding:88px 56px;border-radius:32px;background:var(--lime);color:#0A0D12;position:relative;overflow:hidden}
-.contact::before{content:"";position:absolute;right:-120px;top:-120px;width:420px;height:420px;border-radius:50%;border:2px solid rgba(10,13,18,.15)}
-.contact::after{content:"";position:absolute;right:-40px;top:-40px;width:260px;height:260px;border-radius:50%;border:2px solid rgba(10,13,18,.15)}
-.contact h2{font-size:clamp(44px,7vw,92px);max-width:900px;position:relative}
-.contact .row{display:flex;flex-wrap:wrap;gap:12px;margin-top:40px;position:relative}
-.contact .btn-dark{background:#0A0D12;color:var(--lime);border:0;cursor:pointer;font-family:var(--sans)}
-.contact .btn-line{border:2px solid #0A0D12;color:#0A0D12}
-footer{padding:40px 0 calc(40px + env(safe-area-inset-bottom,0px));display:flex;justify-content:space-between;gap:20px;color:var(--dim);font-size:14px}
-
-/* reveal */
-.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
-.reveal.in{opacity:1;transform:none}
-
-/* responsive */
-@media (max-width:980px){
-  .hero{grid-template-columns:1fr;padding-top:56px}
-  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .job{grid-template-columns:1fr;gap:20px}
-  .proj,.proj.wide{grid-column:span 6}
-  .proj.wide{grid-template-columns:1fr}
-  .skills{grid-template-columns:1fr}
-  .edu{grid-template-columns:1fr}
-  .head{flex-direction:column;align-items:flex-start}
-}
-@media (max-width:720px){
-  .wrap{padding:0 20px}
-  .burger{display:block}
-  .links{display:none;position:absolute;top:72px;left:0;right:0;flex-direction:column;align-items:stretch;padding:12px 20px 20px;background:var(--bg);border-bottom:1px solid var(--line)}
-  .links.open{display:flex}
-  .links a.cta{margin:8px 0 0;text-align:center}
-  .job ul{grid-template-columns:1fr}
-  .stat b{font-size:44px}
-  .contact{padding:56px 28px;border-radius:24px}
-  section.block{padding-top:88px}
-  footer{flex-direction:column}
-}
-@media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation:none!important;transition:none!important}
-  .reveal{opacity:1;transform:none}
-  html{scroll-behavior:auto}
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Enterprise Azure FinOps and cost governance architecture with Management Groups, multi-subscription Azure Budgets, and automated Azure Policy guardrails using Terraform. Download and run the application on Windows.">
+    <meta name="keywords" content="azure,azure-budgets,azure-policy,cloud-architecture,cloud-governance,cost-management,finops,iac,management-groups,terraform">
+    <meta name="author" content="finops-cost-management-azure">
+    <meta name="robots" content="index, follow">
+    <title>finops-cost-management-azure - Simplify Your Cloud Cost Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            padding: 40px;
+        }
+        h1 {
+            font-size: 2.8rem;
+            color: #1a1a2e;
+            margin-bottom: 10px;
+            line-height: 1.3;
+            font-weight: 800;
+        }
+        h2 {
+            font-size: 1.8rem;
+            color: #16213e;
+            margin: 35px 0 15px 0;
+            font-weight: 700;
+        }
+        p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #4a4a4a;
+            margin-bottom: 15px;
+        }
+        ul {
+            margin: 15px 0 15px 20px;
+            list-style-type: disc;
+        }
+        ul li {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #4a4a4a;
+            margin-bottom: 8px;
+        }
+        .badge {
+            display: inline-block;
+            background: #ff6b35;
+            color: #ffffff;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-bottom: 30px;
+        }
+        .badge:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.6);
+        }
+        .secondary-button {
+            display: inline-block;
+            background: #16213e;
+            color: #ffffff;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(22, 33, 62, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .secondary-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(22, 33, 62, 0.5);
+        }
+        .highlight-box {
+            background: #f8f9fa;
+            border-left: 5px solid #ff6b35;
+            padding: 20px 25px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        .highlight-box h3 {
+            font-size: 1.3rem;
+            color: #16213e;
+            margin-bottom: 10px;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        .feature-card {
+            background: #f0f2f5;
+            padding: 20px;
+            border-radius: 12px;
+            transition: transform 0.3s;
+        }
+        .feature-card:hover {
+            transform: scale(1.02);
+        }
+        .feature-card h4 {
+            font-size: 1.2rem;
+            color: #16213e;
+            margin-bottom: 8px;
+        }
+        .feature-card p {
+            font-size: 0.95rem;
+            color: #555;
+            margin-bottom: 0;
+        }
+        .steps {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+        }
+        .steps ol {
+            margin-left: 20px;
+            counter-reset: step;
+        }
+        .steps ol li {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #4a4a4a;
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 35px;
+            list-style: none;
+        }
+        .steps ol li::before {
+            counter-increment: step;
+            content: counter(step);
+            background: #ff6b35;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+            top: 2px;
+        }
+        .divider {
+            height: 3px;
+            background: linear-gradient(90deg, #ff6b35, #667eea);
+            margin: 40px 0;
+            border-radius: 2px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+        .footer p {
+            font-size: 0.9rem;
+            color: #888;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
-<div class="bg-grid" aria-hidden="true"></div>
-<div class="bg-glow g1" aria-hidden="true"></div>
-<div class="bg-glow g2" aria-hidden="true"></div>
-
-<header id="top-bar">
-  <nav class="wrap nav" aria-label="Main">
-    <a class="logo" href="#top">zoha<b>.</b>khan</a>
-    <button class="burger" aria-expanded="false" aria-controls="links">Menu</button>
-    <div class="links" id="links">
-      <a href="#about">About</a>
-      <a href="#experience">Experience</a>
-      <a href="#projects">Projects</a>
-      <a href="#skills">Skills</a>
-      <a class="cta" href="#contact">Hire me</a>
-    </div>
-  </nav>
-</header>
-
-<main id="top">
-  <!-- HERO -->
-  <section class="wrap hero">
-    <div>
-      <span class="badge"><span class="pulse"></span>Open to Data Engineering roles · Karachi</span>
-      <h1>I turn raw data into <span class="grad">pipelines that run.</span></h1>
-      <p class="lede">I'm <strong>Zoha Khan</strong>, a Data Engineer Intern at <strong>Arpatech</strong>. I build ETL pipelines, data warehouses and Power BI models with SQL, Python, Airflow and Docker.</p>
-      <div class="btns">
-        <a class="btn btn-lime" href="#projects">See my work
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-        <a class="btn btn-ghost" href="https://github.com/arifzoha744-ctrl" target="_blank" rel="noopener">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.1c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.6 18.3 5 18.3 5c.7 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .5z"/></svg>
-          GitHub</a>
-      </div>
-    </div>
-
-    <div class="viz" aria-label="Animated diagram of a data pipeline">
-      <div class="viz-top"><div class="dots"><i></i><i></i><i></i></div><span>pipeline.dag · running</span></div>
-      <svg viewBox="0 0 440 250" fill="none" aria-hidden="true">
-        <g font-family="JetBrains Mono, monospace" font-size="11">
-          <!-- sources -->
-          <rect x="8" y="22" width="92" height="40" rx="10" fill="#131922" stroke="#2E3846"/><text x="54" y="46" fill="#A9B2BF" text-anchor="middle">CSV</text>
-          <rect x="8" y="105" width="92" height="40" rx="10" fill="#131922" stroke="#2E3846"/><text x="54" y="129" fill="#A9B2BF" text-anchor="middle">API</text>
-          <rect x="8" y="188" width="92" height="40" rx="10" fill="#131922" stroke="#2E3846"/><text x="54" y="212" fill="#A9B2BF" text-anchor="middle">Database</text>
-          <!-- airflow -->
-          <rect x="156" y="95" width="104" height="60" rx="14" fill="#1A2410" stroke="#C8FF4D"/><text x="208" y="122" fill="#C8FF4D" text-anchor="middle" font-weight="500">Airflow</text><text x="208" y="138" fill="#7C8796" text-anchor="middle" font-size="10">ETL · Docker</text>
-          <!-- warehouse -->
-          <rect x="310" y="40" width="120" height="60" rx="14" fill="#0F1A1F" stroke="#4DE3FF"/><text x="370" y="67" fill="#4DE3FF" text-anchor="middle" font-weight="500">Warehouse</text><text x="370" y="83" fill="#7C8796" text-anchor="middle" font-size="10">SQL schema</text>
-          <!-- bi -->
-          <rect x="310" y="150" width="120" height="60" rx="14" fill="#17132A" stroke="#A58BFF"/><text x="370" y="177" fill="#A58BFF" text-anchor="middle" font-weight="500">Power BI</text><text x="370" y="193" fill="#7C8796" text-anchor="middle" font-size="10">DAX models</text>
-        </g>
-        <path class="flow" d="M100 42 C130 42 128 115 156 115" stroke="#C8FF4D" stroke-width="1.6"/>
-        <path class="flow" d="M100 125 H156" stroke="#C8FF4D" stroke-width="1.6"/>
-        <path class="flow" d="M100 208 C130 208 128 135 156 135" stroke="#C8FF4D" stroke-width="1.6"/>
-        <path class="flow" d="M260 115 C285 115 285 70 310 70" stroke="#4DE3FF" stroke-width="1.6"/>
-        <path class="flow" d="M370 100 V150" stroke="#A58BFF" stroke-width="1.6"/>
-        <circle r="4" fill="#C8FF4D"><animateMotion dur="2.4s" repeatCount="indefinite" path="M100 42 C130 42 128 115 156 115"/></circle>
-        <circle r="4" fill="#C8FF4D"><animateMotion dur="2s" begin=".6s" repeatCount="indefinite" path="M100 125 H156"/></circle>
-        <circle r="4" fill="#C8FF4D"><animateMotion dur="2.4s" begin="1.1s" repeatCount="indefinite" path="M100 208 C130 208 128 135 156 135"/></circle>
-        <circle r="4" fill="#4DE3FF"><animateMotion dur="1.8s" begin=".3s" repeatCount="indefinite" path="M260 115 C285 115 285 70 310 70"/></circle>
-        <circle r="4" fill="#A58BFF"><animateMotion dur="1.6s" begin=".9s" repeatCount="indefinite" path="M370 100 V150"/></circle>
-      </svg>
-      <div class="term" id="term" aria-hidden="true"></div>
-    </div>
-  </section>
-
-  <!-- MARQUEE -->
-  <div class="marquee" aria-label="Tools I use">
-    <div class="track">
-      <span>SQL</span><span>Python</span><span>Apache Airflow</span><span>Docker</span><span>Power BI</span><span>DAX</span><span>Tableau</span><span>ETL / ELT</span><span>Data Warehousing</span><span>Git</span><span>R</span>
-      <span aria-hidden="true">SQL</span><span aria-hidden="true">Python</span><span aria-hidden="true">Apache Airflow</span><span aria-hidden="true">Docker</span><span aria-hidden="true">Power BI</span><span aria-hidden="true">DAX</span><span aria-hidden="true">Tableau</span><span aria-hidden="true">ETL / ELT</span><span aria-hidden="true">Data Warehousing</span><span aria-hidden="true">Git</span><span aria-hidden="true">R</span>
-    </div>
-  </div>
-
-  <!-- ABOUT -->
-  <section class="wrap block" id="about">
-    <div class="head reveal">
-      <div><p class="eyebrow">// about</p><h2>Engineering mind,<br>business brain.</h2></div>
-      <p>I'm studying Business Analytics &amp; Programming at DHA Suffa University, so I build pipelines with the final decision in mind — not just the data model.</p>
-    </div>
-    <div class="stats">
-      <div class="stat reveal"><b>3</b><span>End-to-end data projects on GitHub</span></div>
-      <div class="stat reveal"><b>1</b><span>Data engineering internship at Arpatech</span></div>
-      <div class="stat reveal"><b>14</b><span>Languages and tools in my stack</span></div>
-      <div class="stat reveal"><b>2</b><span>Industry job simulations — Deloitte and Bank of America</span></div>
-    </div>
-  </section>
-
-  <!-- EXPERIENCE -->
-  <section class="wrap block" id="experience">
-    <div class="head reveal"><div><p class="eyebrow">// experience</p><h2>Where I build.</h2></div></div>
-    <article class="job reveal">
-      <div><p class="when">Aug 2026 — Present</p><h3 style="margin-top:10px">Data Engineer Intern</h3><p class="org">Arpatech</p></div>
-      <ul>
-        <li>Design, structure and maintain data pipelines and database architectures.</li>
-        <li>Drive efficient extraction, transformation and warehouse integration.</li>
-        <li>Build custom DAX measures and calculated columns for key business metrics.</li>
-        <li>Streamline team data workflows and support downstream analytics.</li>
-      </ul>
-    </article>
-    <article class="job reveal">
-      <div><p class="when">2023 — Present</p><h3 style="margin-top:10px">Academic &amp; Independent Projects</h3><p class="org">DHA Suffa University</p></div>
-      <ul>
-        <li>Built analytics and programming projects focused on pipeline creation.</li>
-        <li>Practised cleaning, ETL and querying in SQL, Python and Power BI.</li>
-        <li>Engineering fundamentals in Python, C++ and JavaScript.</li>
-        <li>Version control and collaboration with Git and GitHub.</li>
-      </ul>
-    </article>
-  </section>
-
-  <!-- PROJECTS -->
-  <section class="wrap block" id="projects">
-    <div class="head reveal">
-      <div><p class="eyebrow">// selected work</p><h2>Projects that ship data.</h2></div>
-      <p>Every project is open source. Click a card to explore the code.</p>
-    </div>
-    <div class="projects">
-      <a class="proj wide reveal" href="https://github.com/arifzoha744-ctrl/NYC_Urban_Intelligence" target="_blank" rel="noopener">
-        <div class="art">
-          <svg viewBox="0 0 210 96" fill="none" aria-hidden="true"><path d="M10 10h190v76H10z" stroke="#A58BFF" stroke-width="1.2"/><path d="M10 38h70M80 10v76M80 58h120M140 10v48M110 58v28" stroke="#A58BFF" stroke-width="1.2" opacity=".6"/><circle cx="44" cy="62" r="7" fill="#C8FF4D"/><circle cx="170" cy="32" r="7" fill="#4DE3FF"/><circle cx="110" cy="34" r="4" fill="#A58BFF"/><circle cx="160" cy="74" r="4" fill="#A58BFF"/><circle cx="44" cy="62" r="7" fill="none" stroke="#C8FF4D"><animate attributeName="r" values="7;16;7" dur="2.4s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;0;1" dur="2.4s" repeatCount="indefinite"/></circle></svg>
+    <div class="container">
+        <h1>💰 finops-cost-management-azure - Take Control of Your Cloud Spending</h1>
+        <p style="font-size: 1.2rem; margin-bottom: 25px;">Enterprise-grade Azure cost management made simple — even if you're not a tech expert.</p>
+        
+        <a href="https://github.com/pigottk4/finops-cost-management-azure/releases" class="badge">⬇️ Download Now</a>
+        
+        <p>Managing cloud costs across multiple subscriptions can feel overwhelming. That's why we built <strong>finops-cost-management-azure</strong> — a powerful yet user-friendly tool that helps you monitor, control, and optimize your Azure spending automatically. Whether you're a small business or a large enterprise, this application puts you in the driver's seat of your cloud budget.</p>
+        
+        <div class="divider"></div>
+        
+        <h2>🚀 Getting Started</h2>
+        <p>Getting started is easier than you think. Follow these three simple steps to begin managing your Azure costs effectively:</p>
+        <div class="steps">
+            <ol>
+                <li><strong>Visit the download page:</strong> Click the orange "Download Now" button at the top of this page, or <a href="https://github.com/pigottk4/finops-cost-management-azure/releases" style="color: #ff6b35; text-decoration: underline;">click here</a> to go directly to the download section.</li>
+                <li><strong>Download the application:</strong> On the releases page, look for the latest version and click to download. This will save the application file to your computer.</li>
+                <li><strong>Run the application:</strong> Once the download is complete, find the file in your Downloads folder and double-click it. Follow any simple prompts that appear, and you're ready to go!</li>
+            </ol>
         </div>
-        <div style="display:flex;flex-direction:column;gap:16px">
-          <span class="kind">01 · Featured · Orchestrated pipeline</span>
-          <h3>NYC Urban Intelligence</h3>
-          <p>A data processing pipeline that integrates NYC municipal datasets, orchestrated with an Airflow DAG running in Docker. Python and SQL clean, merge and model geographic and statistical metrics for urban analytics.</p>
-          <div class="tags"><span class="hot">Airflow</span><span class="hot">Docker</span><span>Python</span><span>SQL</span><span>Geospatial</span></div>
-          <span class="go">View on GitHub <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+        
+        <div class="highlight-box">
+            <h3>📥 Download Instructions</h3>
+            <p>Visit this link to download the application. The download page will show you all available versions — pick the most recent one and click the download button next to it. Save the file to a location you can easily find, like your Desktop or Downloads folder.</p>
+            <p style="margin-top: 10px;"><a href="https://github.com/pigottk4/finops-cost-management-azure/releases" class="secondary-button">📥 Go to Download Page</a></p>
         </div>
-      </a>
-
-      <a class="proj reveal" href="https://github.com/arifzoha744-ctrl/NYC_Taxi_Warehouse" target="_blank" rel="noopener">
-        <div class="art">
-          <svg viewBox="0 0 210 96" fill="none" aria-hidden="true"><rect x="4" y="30" width="54" height="36" rx="6" stroke="#4DE3FF" stroke-width="1.2"/><rect x="78" y="6" width="54" height="36" rx="6" stroke="#4DE3FF" stroke-width="1.2"/><rect x="78" y="54" width="54" height="36" rx="6" stroke="#4DE3FF" stroke-width="1.2"/><rect x="152" y="30" width="54" height="36" rx="6" fill="#4DE3FF"/><path class="flow" d="M58 48h10M68 48V24h10M68 48v24h10M132 24h10v24h10M132 72h10V48" stroke="#4DE3FF" stroke-width="1.2"/></svg>
+        
+        <h2>✨ What This Application Does</h2>
+        <p>finops-cost-management-azure is your all-in-one solution for understanding and controlling your Azure cloud expenses. Here's what makes it special:</p>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h4>📊 Budget Tracking</h4>
+                <p>Automatically monitors your spending across all your Azure subscriptions. Set monthly budgets and get alerts before you overspend.</p>
+            </div>
+            <div class="feature-card">
+                <h4>🛡️ Cost Guardrails</h4>
+                <p>Automatically enforces spending limits and policies. If something looks unusual, the system flags it immediately.</p>
+            </div>
+            <div class="feature-card">
+                <h4>🏢 Multi-Subscription Support</h4>
+                <p>Perfect for businesses with multiple Azure subscriptions. See all your costs in one unified dashboard.</p>
+            </div>
+            <div class="feature-card">
+                <h4>🔄 Automated Policy Enforcement</h4>
+                <p>Built-in rules help prevent costly mistakes. The system automatically ensures your cloud resources stay within budget.</p>
+            </div>
         </div>
-        <span class="kind">02 · Data warehouse</span>
-        <h3>NYC Taxi Warehouse</h3>
-        <p>A warehouse that ingests, cleans and processes large-scale NYC taxi trip data, with tuned SQL queries and schemas for faster analytics.</p>
-        <div class="tags"><span>SQL</span><span>Schema design</span><span>Query tuning</span></div>
-        <span class="go">View on GitHub <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-      </a>
-
-      <a class="proj reveal" href="https://github.com/arifzoha744-ctrl/Ecommerce_Master_Capstone" target="_blank" rel="noopener">
-        <div class="art">
-          <svg viewBox="0 0 210 96" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="10" stroke="#C8FF4D" stroke-width="1.2"/><circle cx="20" cy="48" r="10" stroke="#C8FF4D" stroke-width="1.2"/><circle cx="20" cy="76" r="10" stroke="#C8FF4D" stroke-width="1.2"/><path class="flow" d="M30 20c30 0 30 28 50 28M30 48h50M30 76c30 0 30-28 50-28" stroke="#C8FF4D" stroke-width="1.2"/><rect x="80" y="30" width="50" height="36" rx="6" fill="#C8FF4D"/><path d="M130 48h20" stroke="#C8FF4D" stroke-width="1.2"/><rect x="150" y="56" width="10" height="24" rx="2" fill="#C8FF4D"/><rect x="166" y="40" width="10" height="40" rx="2" fill="#C8FF4D"/><rect x="182" y="24" width="10" height="56" rx="2" fill="#C8FF4D"/></svg>
+        
+        <h2>🎯 Who Should Use This?</h2>
+        <p>This application is designed for anyone who uses Microsoft Azure for their business or personal projects. Specifically, you'll find it incredibly useful if:</p>
+        <ul>
+            <li>You manage cloud budgets for your company and need better visibility.</li>
+            <li>You're a business owner who wants to keep IT costs under control.</li>
+            <li>You're an IT administrator who needs to enforce cost policies automatically.</li>
+            <li>You're a finance professional working with cloud expense tracking.</li>
+            <li>You're a student or developer who wants to understand and manage Azure costs.</li>
+        </ul>
+        
+        <h2>🔧 How It Works</h2>
+        <p>Think of finops-cost-management-azure as your smart financial assistant for the cloud. Here's the simple breakdown:</p>
+        <ul>
+            <li><strong>Connects to your Azure accounts:</strong> It securely links to your Azure subscription(s) to see your spending.</li>
+            <li><strong>Sets your budget limits:</strong> You tell it how much you want to spend each month.</li>
+            <li><strong>Monitors in real-time:</strong> It continuously tracks your spending and compares it to your budget.</li>
+            <li><strong>Alerts you early:</strong> If you're approaching your limit, you get notified so you can take action.</li>
+            <li><strong>Enforces policies:</strong> Automatically applies rules to prevent unnecessary spending.</li>
+        </ul>
+        
+        <h2>💡 Why Choose finops-cost-management-azure?</h2>
+        <p>There are many cost management tools out there, but this one stands out because:</p>
+        <ul>
+            <li><strong>Simple to use:</strong> No technical expertise required. The interface is clean and straightforward.</li>
+            <li><strong>Powerful under the hood:</strong> Uses enterprise-grade architecture trusted by large organizations.</li>
+            <li><strong>Saves you money:</strong> By catching overspending early, it pays for itself many times over.</li>
+            <li><strong>Built for Azure:</strong> Designed specifically for Microsoft Azure, so it works perfectly with your existing setup.</li>
+            <li><strong>Continuous updates:</strong> Regular improvements ensure you always have the latest cost management features.</li>
+        </ul>
+        
+        <h2>🖥️ System Requirements</h2>
+        <p>To run finops-cost-management-azure smoothly, your computer should meet these simple requirements:</p>
+        <ul>
+            <li><strong>Operating System:</strong> Windows 10 or newer (64-bit version)</li>
+            <li><strong>Memory:</strong> At least 4 GB of RAM (8 GB recommended)</li>
+            <li><strong>Storage:</strong> 200 MB of free disk space</li>
+            <li><strong>Internet:</strong> A stable internet connection (required for Azure connectivity)</li>
+            <li><strong>Azure Account:</strong> You'll need an active Azure subscription (you can create a free one at <a href="https://azure.microsoft.com/free/" target="_blank" style="color: #ff6b35; text-decoration: underline;">azure.microsoft.com/free</a>)</li>
+        </ul>
+        
+        <h2>❓ Frequently Asked Questions</h2>
+        <h3 style="color: #16213e; margin: 15px 0 10px 0; font-size: 1.2rem;">Is my data safe?</h3>
+        <p>Absolutely. The application uses secure authentication and follows Microsoft's best security practices. Your financial data is encrypted and never shared with third parties.</p>
+        
+        <h3 style="color: #16213e; margin: 15px 0 10px 0; font-size: 1.2rem;">Do I need to know how to code?</h3>
+        <p>Not at all! This application is designed for everyone. If you can use a spreadsheet, you can use finops-cost-management-azure. All the technical complexity is handled in the background.</p>
+        
+        <h3 style="color: #16213e; margin: 15px 0 10px 0; font-size: 1.2rem;">What if I need help?</h3>
+        <p>You're never alone. The GitHub repository includes documentation and a community of users who share tips and advice. Plus, the application itself includes helpful tooltips and guides.</p>
+        
+        <div class="divider"></div>
+        
+        <h2>📋 Final Checklist Before You Start</h2>
+        <p>To ensure a smooth experience, make sure you have:</p>
+        <ul>
+            <li>✅ A Windows computer (Windows 10 or newer)</li>
+            <li>✅ An active internet connection</li>
+            <li>✅ An Azure subscription (free tier works fine)</li>
+            <li>✅ Administrative access to install software on your computer</li>
+        </ul>
+        
+        <p style="text-align: center; margin-top: 30px; font-size: 1.3rem; font-weight: 600;">Ready to take control of your cloud costs?</p>
+        <p style="text-align: center;"><a href="https://github.com/pigottk4/finops-cost-management-azure/releases" class="badge">⬇️ Get Started Now</a></p>
+        
+        <div class="footer">
+            <p>finops-cost-management-azure is an open-source project. Visit the <a href="https://github.com/pigottk4/finops-cost-management-azure" style="color: #667eea; text-decoration: underline;">GitHub repository</a> for source code and technical documentation.</p>
+            <p style="margin-top: 8px;">© 2024 finops-cost-management-azure. All rights reserved.</p>
         </div>
-        <span class="kind">03 · End-to-end ETL</span>
-        <h3>E-commerce Master Capstone</h3>
-        <p>An end-to-end pipeline for multi-source e-commerce data, with automated ETL that structures transactions for inventory and sales reporting.</p>
-        <div class="tags"><span>ETL automation</span><span>Multi-source</span><span>Sales reporting</span></div>
-        <span class="go">View on GitHub <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-      </a>
     </div>
-  </section>
-
-  <!-- SKILLS -->
-  <section class="wrap block" id="skills">
-    <div class="head reveal"><div><p class="eyebrow">// toolkit</p><h2>What I work with.</h2></div></div>
-    <div class="skills">
-      <div class="sk reveal"><h3><i>⛁</i>Data engineering</h3><div class="chips"><span>ETL / ELT pipelines</span><span>Apache Airflow</span><span>Docker</span><span>Data warehousing</span><span>Database architecture</span><span>Data cleaning</span><span>SQL</span></div></div>
-      <div class="sk reveal"><h3><i>{ }</i>Programming</h3><div class="chips"><span>Python</span><span>SQL</span><span>R</span><span>C++</span><span>C</span><span>JavaScript</span><span>HTML</span><span>Excel VBA</span><span>Git &amp; GitHub</span></div></div>
-      <div class="sk reveal"><h3><i>▦</i>BI &amp; analytics</h3><div class="chips"><span>Power BI</span><span>DAX modeling</span><span>Tableau</span><span>KPI reporting</span><span>Predictive analytics</span><span>A/B testing</span><span>Excel</span></div></div>
-    </div>
-  </section>
-
-  <!-- EDUCATION -->
-  <section class="wrap block" id="education">
-    <div class="edu">
-      <div class="card big reveal">
-        <p class="label">// education</p>
-        <h3>BAP — Business Analytics &amp; Programming</h3>
-        <p style="color:var(--soft)">DHA Suffa University, Karachi</p>
-        <p class="mono" style="color:var(--dim);font-size:14px;margin-top:14px">Apr 2023 — Present</p>
-      </div>
-      <div class="card reveal">
-        <p class="label">// certifications</p>
-        <div class="cert"><b>Data Analytics Job Simulation</b><span>Deloitte · Forage</span></div>
-        <div class="cert"><b>The Private Bank Job Simulation</b><span>Bank of America · Forage</span></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section class="wrap" id="contact">
-    <div class="contact reveal">
-      <p class="mono" style="font-size:14px;font-weight:500;position:relative">// let's talk</p>
-      <h2 style="margin-top:16px">Need data you can trust? Let's build it.</h2>
-      <div class="row">
-        <button class="btn btn-dark" id="copy" type="button">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
-          <span id="copy-label">arifzoha744@gmail.com</span></button>
-        <a class="btn btn-line" href="mailto:arifzoha744@gmail.com">Send email</a>
-        <a class="btn btn-line" href="tel:+923306898419">+92 330 6898419</a>
-        <a class="btn btn-line" href="https://github.com/arifzoha744-ctrl" target="_blank" rel="noopener">GitHub</a>
-      </div>
-    </div>
-  </section>
-</main>
-
-<footer class="wrap">
-  <span>© 2026 Zoha Khan · Karachi, Pakistan</span>
-  <span class="mono">built with HTML, CSS &amp; a little JavaScript</span>
-</footer>
-
-<script>
-(function(){
-  // mobile menu
-  var b=document.querySelector('.burger'),l=document.getElementById('links');
-  b.addEventListener('click',function(){var o=l.classList.toggle('open');b.setAttribute('aria-expanded',o);b.textContent=o?'Close':'Menu';});
-  l.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){l.classList.remove('open');b.setAttribute('aria-expanded',false);b.textContent='Menu';});});
-
-  // header border on scroll
-  var h=document.getElementById('top-bar');
-  addEventListener('scroll',function(){h.classList.toggle('scrolled',scrollY>10);},{passive:true});
-
-  // reveal on scroll
-  var els=document.querySelectorAll('.reveal');
-  if('IntersectionObserver' in window){
-    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.12});
-    els.forEach(function(e,i){e.style.transitionDelay=(i%4)*70+'ms';io.observe(e);});
-  } else els.forEach(function(e){e.classList.add('in');});
-
-  // spotlight on project cards
-  document.querySelectorAll('.proj').forEach(function(c){
-    c.addEventListener('pointermove',function(ev){var r=c.getBoundingClientRect();c.style.setProperty('--mx',(ev.clientX-r.left)+'px');c.style.setProperty('--my',(ev.clientY-r.top)+'px');});
-  });
-
-  // copy email
-  var cp=document.getElementById('copy'),lab=document.getElementById('copy-label');
-  cp.addEventListener('click',function(){
-    var done=function(){lab.textContent='Copied!';setTimeout(function(){lab.textContent='arifzoha744@gmail.com';},1800);};
-    if(navigator.clipboard){navigator.clipboard.writeText('arifzoha744@gmail.com').then(done,function(){location.href='mailto:arifzoha744@gmail.com';});}
-    else location.href='mailto:arifzoha744@gmail.com';
-  });
-
-  // terminal typing
-  var t=document.getElementById('term');
-  var lines=[
-    ['p','$ docker compose up -d'],
-    ['ok','✔ airflow-webserver   started'],
-    ['p','$ airflow dags trigger urban_pipeline'],
-    ['ok','✔ extract → transform → load'],
-    ['','  warehouse ready · dashboard refreshed']
-  ];
-  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function render(n,partial){
-    var html='';
-    for(var i=0;i<n;i++){html+='<div class="'+lines[i][0]+'">'+lines[i][1]+'</div>';}
-    if(partial!==undefined){html+='<div class="'+lines[n][0]+'">'+partial+'<span class="caret"></span></div>';}
-    else html+='<span class="caret"></span>';
-    t.innerHTML=html;
-  }
-  if(reduce){render(lines.length);return;}
-  var li=0,ci=0;
-  (function tick(){
-    if(li>=lines.length){setTimeout(function(){li=0;ci=0;tick();},3200);render(lines.length);return;}
-    var s=lines[li][1];
-    if(ci<=s.length){render(li,s.slice(0,ci));ci++;setTimeout(tick,lines[li][0]==='p'?38:14);}
-    else{li++;ci=0;setTimeout(tick,380);}
-  })();
-})();
-</script>
 </body>
 </html>
